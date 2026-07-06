@@ -32,7 +32,16 @@
     filter: drop-shadow(0 16px 32px rgba(20, 24, 33, 0.30));
   }
   h1 { font-size: 32px; letter-spacing: -0.025em; margin: 0 0 8px; font-weight: 700; }
-  .tagline { color: var(--muted); font-size: 16px; line-height: 1.55; margin: 0 auto 30px; max-width: 400px; }
+  .tagline { color: var(--muted); font-size: 16px; line-height: 1.55; margin: 0 auto 26px; max-width: 400px; }
+  /* Invite banner — revealed only when the URL carries a valid ?code=. */
+  .invite {
+    display: none; align-items: flex-start; gap: 9px; text-align: left;
+    background: #eef1f6; border: 1px solid var(--line); border-radius: 13px;
+    color: var(--ink); font-size: 14px; line-height: 1.5;
+    padding: 12px 16px; margin: 0 auto 26px; max-width: 430px;
+  }
+  .invite.show { display: flex; }
+  .invite .star { color: var(--primary); flex-shrink: 0; margin-top: 1px; }
   .btn {
     display: inline-flex; align-items: center; gap: 10px;
     background: var(--primary); color: #fff; font-size: 16.5px; font-weight: 600;
@@ -43,6 +52,10 @@
   .btn:hover { transform: translateY(-1px); background: var(--primary-hover); box-shadow: 0 10px 26px rgba(28, 32, 40, 0.28); }
   .btn svg { width: 19px; height: 19px; }
   .req { color: var(--muted); font-size: 12.5px; margin: 15px 0 0; }
+  .openapp { display: none; font-size: 13px; color: var(--muted); margin: 16px 0 0; }
+  .openapp.show { display: block; }
+  .openapp a { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
+  .openapp a:hover { border-color: var(--muted); }
   .steps {
     text-align: left; background: var(--card); border: 1px solid var(--line);
     border-radius: 16px; padding: 22px 24px; margin: 34px 0 0;
@@ -58,7 +71,9 @@
     background: var(--primary); color: #fff; font-size: 12.5px; font-weight: 600;
     display: flex; align-items: center; justify-content: center;
   }
-  .steps code { background: var(--soft); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; font-size: 13px; }
+  .steps code, .codechip { background: var(--soft); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; font-size: 13px; }
+  .codehint { display: none; font-size: 12.5px; color: var(--muted); margin: 14px 0 0; }
+  .codehint.show { display: block; }
   .foot { margin: 28px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
   .foot a { color: var(--ink); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--line); }
   .foot a:hover { border-color: var(--muted); }
@@ -70,6 +85,11 @@
     <h1>Job Tracker</h1>
     <p class="tagline">Your job search, organized — applications, contacts, interviews, and AI help, all on your own Mac.</p>
 
+    <div id="invite" class="invite">
+      <span class="star" aria-hidden="true">✦</span>
+      <span id="invite-msg"></span>
+    </div>
+
     <a class="btn" href="https://github.com/alex-bisgould/jobtracker-releases/releases/latest/download/Job-Tracker-mac-arm64.dmg">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" />
@@ -78,6 +98,8 @@
     </a>
     <p class="req">Requires an Apple Silicon Mac (M1 or later) · macOS 12+ · signed &amp; notarized by Apple</p>
 
+    <p id="openapp" class="openapp">Already have Job Tracker? <a id="openapp-link" href="#">Open it and finish joining →</a></p>
+
     <section class="steps">
       <h2>First-time setup</h2>
       <ol>
@@ -85,10 +107,34 @@
         <li>Drag <strong>Job Tracker</strong> into your <strong>Applications</strong> folder.</li>
         <li>Open it from Applications. If macOS ever asks, right-click the app and choose <strong>Open</strong>.</li>
       </ol>
+      <p id="codehint" class="codehint">Your invite code: <span id="code-val" class="codechip"></span> — enter it when the app opens if it doesn’t fill in automatically.</p>
     </section>
 
     <p class="foot">The app keeps itself up to date automatically — no need to return here.<br />
       Looking for a specific version? <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">All releases</a>.</p>
   </main>
+
+  <script>
+    // Invite-aware: one uniform link. `code` is authoritative (the app re-verifies it via
+    // Track G's detect); `type`/`name` are display hints from the inviter (Track I) only.
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var code = (p.get("code") || "").trim();
+      if (!/^[A-Za-z0-9._-]{1,64}$/.test(code)) return; // no/invalid code → plain download page
+      var type = (p.get("type") || "").toLowerCase();
+      var name = (p.get("name") || "").trim().slice(0, 60);
+      var msg = "You’ve been invited to Job Tracker.";
+      if (type === "referral") msg = "You’ve been invited to Job Tracker — you’ll both get 2 weeks of full AI, free, when you sign up.";
+      else if (type === "household") msg = name ? ("You’ve been invited to join " + name + " on Job Tracker.") : "You’ve been invited to join a household on Job Tracker.";
+      else if (type === "link" || type === "account") msg = "You’ve been invited to share a Job Tracker workspace.";
+      var $ = function (id) { return document.getElementById(id); };
+      $("invite-msg").textContent = msg;              // textContent = XSS-safe for name
+      $("invite").classList.add("show");
+      $("openapp-link").href = "jobtracker://join?code=" + encodeURIComponent(code);
+      $("openapp").classList.add("show");
+      $("code-val").textContent = code;
+      $("codehint").classList.add("show");
+    })();
+  </script>
 </body>
 </html>
