@@ -4,42 +4,76 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>What’s New — Job Tracker</title>
-<meta name="description" content="Release notes for Job Tracker for Mac." />
+<meta name="description" content="Full release notes for Job Tracker for Mac — every feature, enhancement, and fix." />
 <link rel="icon" href="./icon.png" />
 <style>
-  /* Same palette family as index.html (mirrors the app UI). */
   :root {
     --bg: #f6f7f9; --bg2: #edeff2;
     --ink: #1b2027; --muted: #767d89;
     --primary: #22272f;
     --card: #ffffff; --line: #e7e9ec; --soft: #f4f5f7;
-    --feature: #22633c; --featbg: #e7f3ec;
-    --fix: #7a4b12; --fixbg: #f7efe2;
+    --feature: #1d6b3f; --featbg: #e5f4ea; --featline: #c8e6d3;
+    --enh: #1d4f8f; --enhbg: #e7eff9; --enhline: #cadcf0;
+    --fix: #8a5a12; --fixbg: #faf0dd; --fixline: #eeddb9;
+    --chip: #eceef2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a; --bg2: #0f1114;
+      --ink: #e8eaee; --muted: #9aa1ac;
+      --primary: #e8eaee;
+      --card: #1c1f24; --line: #2a2e35; --soft: #23272d;
+      --feature: #7fd6a2; --featbg: #17301f; --featline: #24513a;
+      --enh: #93bef2; --enhbg: #16233a; --enhline: #24406b;
+      --fix: #ecc07a; --fixbg: #33270f; --fixline: #5c4a1e;
+      --chip: #262a31;
+    }
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
-    background: radial-gradient(1100px 620px at 50% -12%, #ffffff 0%, var(--bg) 46%, var(--bg2) 100%);
+    background: radial-gradient(1100px 620px at 50% -12%, var(--card) 0%, var(--bg) 46%, var(--bg2) 100%);
     min-height: 100vh; padding: 44px 20px; -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 640px; margin: 0 auto; }
-  header { text-align: center; margin-bottom: 30px; }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 28px; }
   header img { width: 72px; height: 72px; filter: drop-shadow(0 10px 22px rgba(20,24,33,.25)); }
-  h1 { font-size: 26px; letter-spacing: -0.02em; margin: 10px 0 4px; }
-  .sub { color: var(--muted); font-size: 14px; margin: 0; }
+  h1 { font-size: 27px; letter-spacing: -0.02em; margin: 10px 0 4px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
   .sub a { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
-  .rel {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 18px 20px; margin: 0 0 14px; box-shadow: 0 1px 3px rgba(20,24,33,.04);
+  .search {
+    width: 100%; max-width: 420px; margin: 0 auto; display: block;
+    background: var(--card); border: 1px solid var(--line); border-radius: 11px;
+    color: var(--ink); font-size: 14px; padding: 10px 14px; outline: none;
   }
-  .rel h2 { font-size: 16px; margin: 0 0 2px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-  .rel .date { color: var(--muted); font-size: 12.5px; font-weight: 400; }
-  .rel .body { font-size: 14px; line-height: 1.6; color: var(--ink); white-space: pre-wrap; margin: 8px 0 0; }
+  .search:focus { border-color: var(--muted); }
+  .rel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 15px;
+    padding: 18px 20px; margin: 0 0 14px; box-shadow: 0 1px 3px rgba(20,24,33,.05);
+  }
+  .rel h2 { font-size: 16px; margin: 0; display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
+  .ver {
+    font-size: 12px; font-weight: 700; color: var(--ink);
+    background: var(--chip); border: 1px solid var(--line);
+    padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .rel .date { color: var(--muted); font-size: 12.5px; font-weight: 400; margin-left: auto; white-space: nowrap; }
+  .areas { margin: 8px 0 0; display: flex; gap: 6px; flex-wrap: wrap; }
+  .area { font-size: 11px; color: var(--muted); background: var(--soft); border: 1px solid var(--line); padding: 1px 8px; border-radius: 999px; }
+  .items { margin: 12px 0 0; padding: 0; list-style: none; }
+  .items li { display: flex; gap: 9px; align-items: flex-start; font-size: 13.5px; line-height: 1.55; padding: 4px 0; }
+  .tag {
+    flex-shrink: 0; font-size: 10.5px; font-weight: 700; letter-spacing: .03em;
+    padding: 1.5px 7px; border-radius: 6px; margin-top: 2px; text-transform: uppercase;
+  }
+  .tag.feature { color: var(--feature); background: var(--featbg); border: 1px solid var(--featline); }
+  .tag.enhancement { color: var(--enh); background: var(--enhbg); border: 1px solid var(--enhline); }
+  .tag.bugfix { color: var(--fix); background: var(--fixbg); border: 1px solid var(--fixline); }
   .empty { text-align: center; color: var(--muted); padding: 40px 0; }
-  .more { display: block; text-align: center; margin: 22px auto 0; background: var(--card);
-    border: 1px solid var(--line); border-radius: 12px; padding: 11px 20px; font-size: 14px;
+  .more { display: block; margin: 22px auto 0; background: var(--card);
+    border: 1px solid var(--line); border-radius: 12px; padding: 11px 22px; font-size: 14px;
     font-weight: 600; color: var(--ink); cursor: pointer; }
   .more:hover { background: var(--soft); }
   .foot { margin: 30px 0 0; text-align: center; font-size: 12.5px; color: var(--muted); }
@@ -51,62 +85,99 @@
     <header>
       <a href="./index.html"><img src="./icon.png" alt="Job Tracker" /></a>
       <h1>What’s New</h1>
-      <p class="sub">Release notes, straight from the update feed · <a href="./index.html">Download Job Tracker</a></p>
+      <p class="sub"><span id="count"></span> releases of steady improvement · <a href="./index.html">Download Job Tracker</a></p>
+      <input id="q" class="search" type="search" placeholder="Search releases (e.g. resume, Gmail, calendar…)" />
     </header>
-    <div id="list"><p class="empty">Loading releases…</p></div>
+    <div id="list"><p class="empty">Loading release notes…</p></div>
     <button id="more" class="more" style="display:none" type="button">Show older releases</button>
-    <p class="foot"><a href="./index.html">Home</a> · <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">All releases on GitHub</a></p>
+    <p class="foot"><a href="./index.html">Home</a> · <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">Downloads for each version</a></p>
   </div>
 
   <script>
-    // Reads the GitHub releases API at page load (same mechanism as the index
-    // version badge) — the list stays current without redeploying. Renders the
-    // release NAME + published date + body text (electron-builder publishes the
-    // notes). textContent everywhere = XSS-safe.
+    // Rich release notes: reads the BUNDLED releases.json (the app's own
+    // changelog — every entry has typed items + feature areas), synced to this
+    // repo on each ship. The GitHub API is only used on index.html for the
+    // version badge. All rendering uses textContent (XSS-safe).
     (function () {
-      var page = 1, per = 10, done = false;
+      var PAGE = 15;
+      var all = [], filtered = [], shown = 0;
       var list = document.getElementById("list");
       var more = document.getElementById("more");
-      function esc(el, txt) { el.textContent = txt; return el; }
-      function render(rels, first) {
-        if (first) list.innerHTML = "";
-        if (first && rels.length === 0) {
-          list.innerHTML = '<p class="empty">No releases yet.</p>';
-          return;
+      var q = document.getElementById("q");
+
+      function fmtDate(iso) {
+        try { return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }); }
+        catch (e) { return ""; }
+      }
+      function card(r) {
+        var art = document.createElement("article"); art.className = "rel"; art.id = "v" + r.version;
+        var h = document.createElement("h2");
+        var v = document.createElement("span"); v.className = "ver"; v.textContent = "v" + r.version; h.appendChild(v);
+        var t = document.createElement("span"); t.textContent = r.title || ""; h.appendChild(t);
+        var d = document.createElement("span"); d.className = "date"; d.textContent = fmtDate(r.date); h.appendChild(d);
+        art.appendChild(h);
+        if (Array.isArray(r.areas) && r.areas.length) {
+          var ar = document.createElement("div"); ar.className = "areas";
+          r.areas.forEach(function (a) { var s = document.createElement("span"); s.className = "area"; s.textContent = a; ar.appendChild(s); });
+          art.appendChild(ar);
         }
-        rels.forEach(function (r) {
-          if (r.draft || r.prerelease) return;
-          var card = document.createElement("article"); card.className = "rel";
-          var h = document.createElement("h2");
-          h.appendChild(esc(document.createElement("span"), r.name || r.tag_name));
-          var d = document.createElement("span"); d.className = "date";
-          if (r.published_at) d.textContent = new Date(r.published_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
-          h.appendChild(d);
-          card.appendChild(h);
-          var body = (r.body || "").trim();
-          if (body) {
-            var p = document.createElement("p"); p.className = "body";
-            p.textContent = body.length > 1200 ? body.slice(0, 1200) + "…" : body;
-            card.appendChild(p);
-          }
-          list.appendChild(card);
-        });
-      }
-      function load() {
-        fetch("https://api.github.com/repos/alex-bisgould/jobtracker-releases/releases?per_page=" + per + "&page=" + page)
-          .then(function (r) { return r.ok ? r.json() : []; })
-          .then(function (rels) {
-            render(rels, page === 1);
-            if (rels.length < per) { done = true; more.style.display = "none"; }
-            else more.style.display = "block";
-            page++;
-          })
-          .catch(function () {
-            if (page === 1) list.innerHTML = '<p class="empty">Couldn’t load releases — see the <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">GitHub releases page</a>.</p>';
+        var items = Array.isArray(r.items) ? r.items : [];
+        if (items.length) {
+          var ul = document.createElement("ul"); ul.className = "items";
+          items.forEach(function (it) {
+            var li = document.createElement("li");
+            var tag = document.createElement("span");
+            var kind = it.type === "feature" || it.type === "bugfix" ? it.type : "enhancement";
+            tag.className = "tag " + kind;
+            tag.textContent = kind === "feature" ? "New" : kind === "bugfix" ? "Fixed" : "Improved";
+            li.appendChild(tag);
+            var txt = document.createElement("span"); txt.textContent = it.label || ""; li.appendChild(txt);
+            ul.appendChild(li);
           });
+          art.appendChild(ul);
+        }
+        return art;
       }
-      more.addEventListener("click", function () { if (!done) load(); });
-      load();
+      function renderMore() {
+        var slice = filtered.slice(shown, shown + PAGE);
+        slice.forEach(function (r) { list.appendChild(card(r)); });
+        shown += slice.length;
+        more.style.display = shown < filtered.length ? "block" : "none";
+      }
+      function apply(term) {
+        list.innerHTML = ""; shown = 0;
+        term = (term || "").trim().toLowerCase();
+        filtered = !term ? all : all.filter(function (r) {
+          if (("v" + r.version).indexOf(term) !== -1) return true;
+          if ((r.title || "").toLowerCase().indexOf(term) !== -1) return true;
+          if ((r.areas || []).some(function (a) { return a.toLowerCase().indexOf(term) !== -1; })) return true;
+          return (r.items || []).some(function (it) { return (it.label || "").toLowerCase().indexOf(term) !== -1; });
+        });
+        if (!filtered.length) { list.innerHTML = '<p class="empty">No releases match.</p>'; more.style.display = "none"; return; }
+        renderMore();
+      }
+      fetch("./releases.json")
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+          if (!d || !Array.isArray(d.releases)) throw new Error("bad data");
+          all = d.releases;
+          document.getElementById("count").textContent = all.length;
+          apply("");
+          // Deep-link: #v5.62.0 scrolls to that release once rendered.
+          var h = location.hash.replace(/^#/, "");
+          if (/^v[\d.]+$/.test(h)) {
+            var target = all.findIndex(function (r) { return "v" + r.version === h; });
+            while (target >= shown && shown < filtered.length) renderMore();
+            var el = document.getElementById(h);
+            if (el) el.scrollIntoView({ block: "start" });
+          }
+        })
+        .catch(function () {
+          list.innerHTML = '<p class="empty">Couldn’t load release notes — see <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">GitHub releases</a>.</p>';
+        });
+      more.addEventListener("click", renderMore);
+      var deb;
+      q.addEventListener("input", function () { clearTimeout(deb); deb = setTimeout(function () { apply(q.value); }, 200); });
     })();
   </script>
 </body>

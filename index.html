@@ -16,6 +16,17 @@
     --primary-hover: #2f3742;
     --card: #ffffff; --line: #e7e9ec; --soft: #f4f5f7;
   }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a; --bg2: #0f1114;
+      --ink: #e8eaee; --muted: #9aa1ac;
+      --primary: #f2f4f7; --primary-hover: #dde1e7;
+      --card: #1c1f24; --line: #2a2e35; --soft: #23272d;
+    }
+    body { background: radial-gradient(1100px 620px at 50% -12%, #1a1d22 0%, var(--bg) 46%, var(--bg2) 100%); }
+    .btn { color: #14161a; }
+    .icon { filter: drop-shadow(0 16px 32px rgba(0,0,0,.55)); }
+  }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
@@ -101,6 +112,9 @@
     border-radius: 13px; cursor: pointer; transition: background .12s ease;
   }
   .share:hover { background: var(--soft); }
+  .latest { font-size: 13px; color: var(--muted); margin: 12px auto 0; max-width: 430px; }
+  .latest a { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
+  .latest a:hover { border-color: var(--muted); }
 </style>
 </head>
 <body>
@@ -123,6 +137,7 @@
       Download for Mac
     </a><button class="share" id="share-btn" type="button">Share</button>
     <p class="req">Requires an Apple Silicon Mac (M1 or later) · macOS 12+ · signed &amp; notarized by Apple</p>
+    <p class="latest js-latest" style="display:none">Latest: <span class="js-latest-title"></span> · <a href="./whats-new.html">see everything new →</a></p>
 
     <p id="openapp" class="openapp">Already have Job Tracker? <a id="openapp-link" href="#">Open it and finish joining →</a></p>
 
@@ -183,6 +198,16 @@
           var s = dt.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
           document.querySelectorAll(".js-reldate").forEach(function (el) { el.textContent = "latest release " + s; });
         }
+      })
+      .catch(function () {});
+    // Latest-release teaser from the bundled rich changelog.
+    fetch("./releases.json")
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        var r0 = d && d.releases && d.releases[0];
+        if (!r0 || !r0.title) return;
+        document.querySelector(".js-latest-title").textContent = r0.title;
+        document.querySelector(".js-latest").style.display = "block";
       })
       .catch(function () {});
     // Share — native sheet with clipboard fallback.
