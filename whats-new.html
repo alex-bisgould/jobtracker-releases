@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What’s New — Job Tracker</title>
+<meta name="description" content="Release notes for Job Tracker for Mac." />
+<link rel="icon" href="./icon.png" />
+<style>
+  /* Same palette family as index.html (mirrors the app UI). */
+  :root {
+    --bg: #f6f7f9; --bg2: #edeff2;
+    --ink: #1b2027; --muted: #767d89;
+    --primary: #22272f;
+    --card: #ffffff; --line: #e7e9ec; --soft: #f4f5f7;
+    --feature: #22633c; --featbg: #e7f3ec;
+    --fix: #7a4b12; --fixbg: #f7efe2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: radial-gradient(1100px 620px at 50% -12%, #ffffff 0%, var(--bg) 46%, var(--bg2) 100%);
+    min-height: 100vh; padding: 44px 20px; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 30px; }
+  header img { width: 72px; height: 72px; filter: drop-shadow(0 10px 22px rgba(20,24,33,.25)); }
+  h1 { font-size: 26px; letter-spacing: -0.02em; margin: 10px 0 4px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0; }
+  .sub a { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
+  .rel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 20px; margin: 0 0 14px; box-shadow: 0 1px 3px rgba(20,24,33,.04);
+  }
+  .rel h2 { font-size: 16px; margin: 0 0 2px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .rel .date { color: var(--muted); font-size: 12.5px; font-weight: 400; }
+  .rel .body { font-size: 14px; line-height: 1.6; color: var(--ink); white-space: pre-wrap; margin: 8px 0 0; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; }
+  .more { display: block; text-align: center; margin: 22px auto 0; background: var(--card);
+    border: 1px solid var(--line); border-radius: 12px; padding: 11px 20px; font-size: 14px;
+    font-weight: 600; color: var(--ink); cursor: pointer; }
+  .more:hover { background: var(--soft); }
+  .foot { margin: 30px 0 0; text-align: center; font-size: 12.5px; color: var(--muted); }
+  .foot a { color: var(--ink); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--line); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="./index.html"><img src="./icon.png" alt="Job Tracker" /></a>
+      <h1>What’s New</h1>
+      <p class="sub">Release notes, straight from the update feed · <a href="./index.html">Download Job Tracker</a></p>
+    </header>
+    <div id="list"><p class="empty">Loading releases…</p></div>
+    <button id="more" class="more" style="display:none" type="button">Show older releases</button>
+    <p class="foot"><a href="./index.html">Home</a> · <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">All releases on GitHub</a></p>
+  </div>
+
+  <script>
+    // Reads the GitHub releases API at page load (same mechanism as the index
+    // version badge) — the list stays current without redeploying. Renders the
+    // release NAME + published date + body text (electron-builder publishes the
+    // notes). textContent everywhere = XSS-safe.
+    (function () {
+      var page = 1, per = 10, done = false;
+      var list = document.getElementById("list");
+      var more = document.getElementById("more");
+      function esc(el, txt) { el.textContent = txt; return el; }
+      function render(rels, first) {
+        if (first) list.innerHTML = "";
+        if (first && rels.length === 0) {
+          list.innerHTML = '<p class="empty">No releases yet.</p>';
+          return;
+        }
+        rels.forEach(function (r) {
+          if (r.draft || r.prerelease) return;
+          var card = document.createElement("article"); card.className = "rel";
+          var h = document.createElement("h2");
+          h.appendChild(esc(document.createElement("span"), r.name || r.tag_name));
+          var d = document.createElement("span"); d.className = "date";
+          if (r.published_at) d.textContent = new Date(r.published_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+          h.appendChild(d);
+          card.appendChild(h);
+          var body = (r.body || "").trim();
+          if (body) {
+            var p = document.createElement("p"); p.className = "body";
+            p.textContent = body.length > 1200 ? body.slice(0, 1200) + "…" : body;
+            card.appendChild(p);
+          }
+          list.appendChild(card);
+        });
+      }
+      function load() {
+        fetch("https://api.github.com/repos/alex-bisgould/jobtracker-releases/releases?per_page=" + per + "&page=" + page)
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (rels) {
+            render(rels, page === 1);
+            if (rels.length < per) { done = true; more.style.display = "none"; }
+            else more.style.display = "block";
+            page++;
+          })
+          .catch(function () {
+            if (page === 1) list.innerHTML = '<p class="empty">Couldn’t load releases — see the <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">GitHub releases page</a>.</p>';
+          });
+      }
+      more.addEventListener("click", function () { if (!done) load(); });
+      load();
+    })();
+  </script>
+</body>
+</html>

@@ -77,6 +77,30 @@
   .foot { margin: 28px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
   .foot a { color: var(--ink); font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--line); }
   .foot a:hover { border-color: var(--muted); }
+  .vline { margin: -14px 0 24px; font-size: 13px; color: var(--muted); }
+  .vbadge {
+    display: inline-block; background: var(--soft); border: 1px solid var(--line);
+    color: var(--ink); font-weight: 600; font-size: 12.5px;
+    padding: 3px 10px; border-radius: 999px; margin-right: 8px;
+  }
+  .grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    margin: 34px 0 0; text-align: left;
+  }
+  @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+  .tile {
+    background: var(--card); border: 1px solid var(--line); border-radius: 13px;
+    padding: 13px 15px; font-size: 13.5px; line-height: 1.5;
+  }
+  .tile b { display: block; font-size: 13.5px; margin-bottom: 2px; }
+  .tile span { color: var(--muted); }
+  .share {
+    display: inline-flex; align-items: center; gap: 7px; margin-left: 10px;
+    background: var(--card); color: var(--ink); font-size: 14.5px; font-weight: 600;
+    border: 1px solid var(--line); text-decoration: none; padding: 14px 20px;
+    border-radius: 13px; cursor: pointer; transition: background .12s ease;
+  }
+  .share:hover { background: var(--soft); }
 </style>
 </head>
 <body>
@@ -84,6 +108,8 @@
     <img class="icon" src="./icon.png" width="112" height="112" alt="Job Tracker app icon" />
     <h1>Job Tracker</h1>
     <p class="tagline">Your job search, organized — applications, contacts, interviews, and AI help, all on your own Mac.</p>
+
+    <p class="vline"><span class="vbadge js-version">v—</span> <span class="js-reldate"></span></p>
 
     <div id="invite" class="invite">
       <span class="star" aria-hidden="true">✦</span>
@@ -95,7 +121,7 @@
         <path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" />
       </svg>
       Download for Mac
-    </a>
+    </a><button class="share" id="share-btn" type="button">Share</button>
     <p class="req">Requires an Apple Silicon Mac (M1 or later) · macOS 12+ · signed &amp; notarized by Apple</p>
 
     <p id="openapp" class="openapp">Already have Job Tracker? <a id="openapp-link" href="#">Open it and finish joining →</a></p>
@@ -110,8 +136,15 @@
       <p id="codehint" class="codehint">Your invite code: <span id="code-val" class="codechip"></span> — enter it when the app opens if it doesn’t fill in automatically.</p>
     </section>
 
+    <section class="grid" aria-label="What you get">
+      <div class="tile"><b>Every application, one place</b><span>Statuses, rounds, offers, deadlines — tracked end to end.</span></div>
+      <div class="tile"><b>AI that does the busywork</b><span>Parse a listing or recruiter message into a full record; tailored r&eacute;sum&eacute;s &amp; cover letters.</span></div>
+      <div class="tile"><b>Your email &amp; messages, connected</b><span>Pull Gmail / Outlook / iMessage threads straight into each opportunity.</span></div>
+      <div class="tile"><b>Local-first &amp; private</b><span>Your data lives on your Mac. Auto-updates, signed &amp; notarized.</span></div>
+    </section>
+
     <p class="foot">The app keeps itself up to date automatically — no need to return here.<br />
-      Looking for a specific version? <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">All releases</a>.</p>
+      <a href="./whats-new.html">What&rsquo;s new</a> · <a href="https://github.com/alex-bisgould/jobtracker-releases/releases">All releases</a> · <a href="./privacy.html">Privacy</a> · <a href="./terms.html">Terms</a></p>
   </main>
 
   <script>
@@ -134,6 +167,36 @@
       $("openapp").classList.add("show");
       $("code-val").textContent = code;
       $("codehint").classList.add("show");
+    })();
+  </script>
+  <script>
+    // Live version badge — reads the releases API at page load so the badge and
+    // date stay current without redeploying (same mechanism as WholeBudget).
+    fetch("https://api.github.com/repos/alex-bisgould/jobtracker-releases/releases/latest")
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.tag_name) return;
+        var v = String(d.tag_name).replace(/^v/, "");
+        document.querySelectorAll(".js-version").forEach(function (el) { el.textContent = "v" + v; });
+        if (d.published_at) {
+          var dt = new Date(d.published_at);
+          var s = dt.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+          document.querySelectorAll(".js-reldate").forEach(function (el) { el.textContent = "latest release " + s; });
+        }
+      })
+      .catch(function () {});
+    // Share — native sheet with clipboard fallback.
+    (function () {
+      var btn = document.getElementById("share-btn");
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        var data = { title: "Job Tracker", text: "Job Tracker — a local-first job-search CRM for Mac", url: "https://alex-bisgould.github.io/jobtracker-releases/" };
+        if (navigator.share) { navigator.share(data).catch(function () {}); return; }
+        navigator.clipboard && navigator.clipboard.writeText(data.url).then(function () {
+          btn.textContent = "Link copied!";
+          setTimeout(function () { btn.textContent = "Share"; }, 1600);
+        });
+      });
     })();
   </script>
 </body>
