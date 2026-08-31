@@ -15,24 +15,25 @@
     --primary: #22272f;      /* app --primary (dark slate) */
     --primary-hover: #2f3742;
     --card: #ffffff; --line: #e7e9ec; --soft: #f4f5f7;
+    --glow: #ffffff; --btn-ink: #ffffff;
+    --icon-shadow: rgba(20, 24, 33, 0.30); --btn-shadow: rgba(28, 32, 40, 0.22);
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #14161a; --bg2: #0f1114;
       --ink: #e8eaee; --muted: #9aa1ac;
-      --primary: #f2f4f7; --primary-hover: #dde1e7;
+      --primary: #e8eaee; --primary-hover: #f6f7f9;
       --card: #1c1f24; --line: #2a2e35; --soft: #23272d;
+      --glow: #232730; --btn-ink: #14161a;
+      --icon-shadow: rgba(0, 0, 0, 0.55); --btn-shadow: rgba(0, 0, 0, 0.45);
     }
-    body { background: radial-gradient(1100px 620px at 50% -12%, #1a1d22 0%, var(--bg) 46%, var(--bg2) 100%); }
-    .btn { color: #14161a; }
-    .icon { filter: drop-shadow(0 16px 32px rgba(0,0,0,.55)); }
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
-    background: radial-gradient(1100px 620px at 50% -12%, #ffffff 0%, var(--bg) 46%, var(--bg2) 100%);
+    background: radial-gradient(1100px 620px at 50% -12%, var(--glow) 0%, var(--bg) 46%, var(--bg2) 100%);
     min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
     padding: 48px 20px; -webkit-font-smoothing: antialiased;
@@ -40,7 +41,7 @@
   .wrap { width: 100%; max-width: 500px; text-align: center; }
   .icon {
     width: 112px; height: 112px; margin: 0 auto 22px; display: block;
-    filter: drop-shadow(0 16px 32px rgba(20, 24, 33, 0.30));
+    filter: drop-shadow(0 16px 32px var(--icon-shadow));
   }
   h1 { font-size: 32px; letter-spacing: -0.025em; margin: 0 0 8px; font-weight: 700; }
   .tagline { color: var(--muted); font-size: 16px; line-height: 1.55; margin: 0 auto 26px; max-width: 400px; }
@@ -55,9 +56,9 @@
   .invite .star { color: var(--primary); flex-shrink: 0; margin-top: 1px; }
   .btn {
     display: inline-flex; align-items: center; gap: 10px;
-    background: var(--primary); color: #fff; font-size: 16.5px; font-weight: 600;
+    background: var(--primary); color: var(--btn-ink); font-size: 16.5px; font-weight: 600;
     text-decoration: none; padding: 15px 28px; border-radius: 13px;
-    box-shadow: 0 6px 18px rgba(28, 32, 40, 0.22);
+    box-shadow: 0 6px 18px var(--btn-shadow);
     transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
   }
   .btn:hover { transform: translateY(-1px); background: var(--primary-hover); box-shadow: 0 10px 26px rgba(28, 32, 40, 0.28); }
