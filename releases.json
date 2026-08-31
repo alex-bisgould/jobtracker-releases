@@ -34,6 +34,10 @@
         {
           "label": "Clearer message when an account feature needs you to sign in first",
           "type": "enhancement"
+        },
+        {
+          "label": "Note: this update moves the app to a new internal address, so you'll be asked for your profile password once after upgrading — nothing is lost and it won't happen again",
+          "type": "enhancement"
         }
       ]
     },

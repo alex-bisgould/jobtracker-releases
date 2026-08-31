@@ -4,17 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<!-- The authorization code transits this URL. It is inert without the PKCE
+     verifier (which never leaves the user's Mac), but don't hand it to anyone. -->
+<meta name="referrer" content="no-referrer">
 <title>Signing you in — Job Tracker</title>
 <style>
   :root {
     color-scheme: light dark;
     --bg: #ffffff; --fg: #16181d; --muted: #5b6270;
     --card: #f6f7f9; --rule: #e3e6ec; --accent: #2f6df6; --ok: #1a7f4b;
+    --bad: #b3261e;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #101216; --fg: #e7e9ee; --muted: #9aa2b1;
       --card: #181b21; --rule: #272b33; --accent: #7aa2ff; --ok: #4ade80;
+      --bad: #ff6b6b;
     }
   }
   * { box-sizing: border-box; }
@@ -30,9 +35,10 @@
     border-radius: 14px; text-align: center;
   }
   .badge {
+    --tone: var(--ok); /* JS swaps this to var(--bad) on an errored round-trip */
     width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 20px;
-    display: grid; place-items: center; font-size: 27px;
-    background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok);
+    display: grid; place-items: center; font-size: 27px; font-weight: 700;
+    background: color-mix(in srgb, var(--tone) 16%, transparent); color: var(--tone);
   }
   .spinner {
     width: 52px; height: 52px; margin: 0 auto 20px; border-radius: 50%;
@@ -81,11 +87,28 @@
   // would let anyone append arbitrary junk to a custom-scheme URL handed to the OS.
   var ALLOWED = ["code", "jt_state", "state", "error", "error_description"];
 
-  function buildDeepLink() {
-    var incoming = new URLSearchParams(window.location.search);
+  // Params arrive in the QUERY for the authorization-code flow, but GoTrue
+  // delivers a meaningful class of failures — provider misconfiguration, consent
+  // errors — in the FRAGMENT instead. Reading only `search` silently swallowed
+  // those: the page showed success and the app received no params at all, which
+  // it reports as "cancelled", masking a real misconfiguration. Merge both,
+  // query winning on collision.
+  function incomingParams() {
+    var merged = new URLSearchParams(window.location.search);
+    var hash = window.location.hash.replace(/^#/, "");
+    if (hash) {
+      var fromHash = new URLSearchParams(hash);
+      fromHash.forEach(function (value, key) {
+        if (!merged.has(key)) merged.set(key, value);
+      });
+    }
+    return merged;
+  }
+
+  function buildDeepLink(params) {
     var out = new URLSearchParams();
     for (var i = 0; i < ALLOWED.length; i++) {
-      var v = incoming.get(ALLOWED[i]);
+      var v = params.get(ALLOWED[i]);
       if (v !== null) out.set(ALLOWED[i], v);
     }
     var qs = out.toString();
@@ -94,30 +117,53 @@
 
   function show(id) { document.getElementById(id).classList.remove("hide"); }
   function hide(id) { document.getElementById(id).classList.add("hide"); }
+  function setText(id, text) { document.getElementById(id).textContent = text; }
 
-  var link = buildDeepLink();
+  var params = incomingParams();
+  var code = params.get("code");
+  var error = params.get("error");
+  var link = buildDeepLink(params);
   document.getElementById("open").setAttribute("href", link);
 
   // No code and no error means someone opened this page directly.
-  var params = new URLSearchParams(window.location.search);
-  if (!params.get("code") && !params.get("error")) {
+  if (!code && !error) {
     hide("spinner");
-    document.getElementById("title").textContent = "Nothing to hand over";
-    document.getElementById("detail").textContent =
-      "This page finishes a Job Tracker sign-in. Start from the app's sign-in button.";
+    setText("title", "Nothing to hand over");
+    setText("detail", "This page finishes a Job Tracker sign-in. Start from the app's sign-in button.");
     return;
   }
 
   // Browsers may block an external-protocol launch without a user gesture, so
   // always surface the manual button as a fallback rather than relying on this.
+  // Hand the app the error too — it needs to clear its pending-sign-in state.
   try { window.location.replace(link); } catch (e) { /* fall through to the button */ }
 
+  // An errored round-trip must NOT claim success. Previously this branch was
+  // unconditional, so declining consent at Google rendered a green check reading
+  // "You're signed in" — directly contradicting the app, which correctly said the
+  // sign-in was cancelled.
   setTimeout(function () {
     hide("spinner");
+    if (error) {
+      var cancelled = error === "access_denied" || error === "user_cancelled_login";
+      document.getElementById("badge").textContent = "!";
+      document.getElementById("badge").style.setProperty("--tone", "var(--bad)");
+      show("badge");
+      setText("title", cancelled ? "Sign-in cancelled" : "Sign-in didn't complete");
+      setText(
+        "detail",
+        cancelled
+          ? "Nothing was changed. You can close this tab and try again from Job Tracker."
+          : "Google or Apple reported: " + (params.get("error_description") || error) +
+            ". Close this tab and try again from Job Tracker.",
+      );
+      setText("hint", "You are not signed in.");
+      show("hint");
+      return;
+    }
     show("badge");
-    document.getElementById("title").textContent = "You're signed in";
-    document.getElementById("detail").textContent =
-      "Job Tracker has your sign-in. If it didn't open automatically, use the button below.";
+    setText("title", "You're signed in");
+    setText("detail", "Job Tracker has your sign-in. If it didn't open automatically, use the button below.");
     show("open");
     show("hint");
   }, 1200);
