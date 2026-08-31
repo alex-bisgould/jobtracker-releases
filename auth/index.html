@@ -87,6 +87,22 @@
   // would let anyone append arbitrary junk to a custom-scheme URL handed to the OS.
   var ALLOWED = ["code", "jt_state", "state", "error", "error_description"];
 
+  // Packet A2 — a successful custom-scheme launch backgrounds this tab on macOS,
+  // so blur/pagehide/visibilitychange are a strong (not perfect — the user could
+  // Cmd-Tab away for an unrelated reason) signal the handoff already happened.
+  // Combined with the one-shot sessionStorage flag below (set only when the
+  // button itself is clicked), this lets the success branch stop inviting a
+  // SECOND launch of the same code+state — previously a replay hit "Sign-in
+  // expired or was already used", an error toast, for a user who WAS signed in.
+  // Registered BEFORE the location.replace(link) call below so the automatic
+  // launch attempt is caught, not just a manual button click.
+  var handedOff = false;
+  window.addEventListener("blur", function () { handedOff = true; });
+  window.addEventListener("pagehide", function () { handedOff = true; });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) handedOff = true;
+  });
+
   // Params arrive in the QUERY for the authorization-code flow, but GoTrue
   // delivers a meaningful class of failures — provider misconfiguration, consent
   // errors — in the FRAGMENT instead. Reading only `search` silently swallowed
@@ -123,7 +139,26 @@
   var code = params.get("code");
   var error = params.get("error");
   var link = buildDeepLink(params);
-  document.getElementById("open").setAttribute("href", link);
+  var openBtn = document.getElementById("open");
+  openBtn.setAttribute("href", link);
+
+  // One-shot: this exact code was already handed off via the button earlier in
+  // this tab's life (e.g. an earlier render of this same page — a bfcache
+  // restore, a Back navigation). Wrapped in try/catch: sessionStorage can throw
+  // in a locked-down/private context, in which case we just fall back to the
+  // blur/visibility signal above.
+  try {
+    if (sessionStorage.getItem("jt-open-" + (code || ""))) handedOff = true;
+  } catch (e) { /* sessionStorage unavailable — blur/visibility signal still applies */ }
+
+  openBtn.addEventListener("click", function () {
+    try { sessionStorage.setItem("jt-open-" + (code || ""), "1"); } catch (e) { /* best-effort */ }
+    // Clicking a custom-scheme href doesn't navigate this page away, so this
+    // visual state persists — it's the only feedback the click did anything.
+    openBtn.style.opacity = "0.5";
+    openBtn.style.pointerEvents = "none";
+    openBtn.textContent = "Opening…";
+  });
 
   // No code and no error means someone opened this page directly.
   if (!code && !error) {
@@ -163,8 +198,16 @@
     }
     show("badge");
     setText("title", "You're signed in");
-    setText("detail", "Job Tracker has your sign-in. If it didn't open automatically, use the button below.");
-    show("open");
+    if (handedOff) {
+      // The launch already happened (automatic replace() above, or an earlier
+      // click) — don't dangle a second "Open Job Tracker" invitation for the
+      // same code+state. (The .app now handles a genuine replay gracefully too
+      // — Packet A2 — but the button shouldn't invite one in the first place.)
+      setText("detail", "You can close this tab.");
+    } else {
+      setText("detail", "Job Tracker has your sign-in.");
+      show("open");
+    }
     show("hint");
   }, 1200);
 })();
