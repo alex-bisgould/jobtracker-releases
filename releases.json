@@ -2,6 +2,41 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.62.3",
+      "title": "Unlock fixed on the profile screen, honest sign-in messages, and a signed-in indicator",
+      "date": "2026-08-31T15:44:36-04:00",
+      "areas": [
+        "Settings",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Unlocking admin view (and locked profiles) can no longer get stuck: every Touch ID outcome now gives feedback, and the passphrase box keeps working even while a Touch ID prompt is open",
+          "type": "bugfix"
+        },
+        {
+          "label": "Touch ID prompts no longer offer the phone/QR pairing sheet in the desktop app",
+          "type": "bugfix"
+        },
+        {
+          "label": "Clicking 'Open Job Tracker' after you're already signed in now says exactly that — instead of a scary 'Sign-in expired' error (browser Back-button included)",
+          "type": "bugfix"
+        },
+        {
+          "label": "The browser hand-off page hides its button entirely once the app has opened, and the button can't fire twice",
+          "type": "enhancement"
+        },
+        {
+          "label": "New: the sidebar shows which account you're signed in with (photo + provider + email), or 'Not signed in' — right under the profile selector",
+          "type": "feature"
+        },
+        {
+          "label": "A Touch ID set up in a browser before the app supported it now gets a clear 'remove and re-add' hint instead of failing silently",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
       "version": "5.62.2",
       "title": "Sign-in reliability: callbacks can no longer be lost",
       "date": "2026-08-31T13:38:49-04:00",
