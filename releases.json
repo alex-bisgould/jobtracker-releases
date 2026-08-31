@@ -2,6 +2,41 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.62.5",
+      "title": "Touch ID works in the app, and a locked profile can no longer block startup",
+      "date": "2026-08-31T17:49:37-04:00",
+      "areas": [
+        "Settings",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Touch ID now genuinely works inside the app: 'Use Touch ID' opens the real macOS prompt for admin view (the old in-app method could never show a prompt — it isn't supported in the desktop shell)",
+          "type": "bugfix"
+        },
+        {
+          "label": "⌘↩ on the profile screen now opens the 'Enter admin view' dialog (passphrase ready, Touch ID firing alongside)",
+          "type": "enhancement"
+        },
+        {
+          "label": "No Touch ID attempt can spin forever anymore — everything times out with a clear message within 20 seconds",
+          "type": "bugfix"
+        },
+        {
+          "label": "Fixed: setting a profile password could prevent the app from starting on its next launch (the startup check was blocked by the new lock)",
+          "type": "bugfix"
+        },
+        {
+          "label": "Account sign-in now works from the profile screen even while a profile is locked",
+          "type": "bugfix"
+        },
+        {
+          "label": "Adding Touch ID to individual profiles is labeled as a browser feature inside the app, instead of hanging",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
       "version": "5.62.4",
       "title": "Recovery release: app loads again, plus profile passwords arrive",
       "date": "2026-08-31T16:17:44-04:00",
