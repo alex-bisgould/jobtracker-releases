@@ -2,6 +2,38 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.62.2",
+      "title": "Sign-in reliability: callbacks can no longer be lost",
+      "date": "2026-08-31T13:38:49-04:00",
+      "areas": [
+        "Settings",
+        "Communication",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Finishing a sign-in now always reaches the app — even if you quit mid-sign-in, closed the sign-in dialog, or the app was still starting up (callbacks were previously lost in a silent race)",
+          "type": "bugfix"
+        },
+        {
+          "label": "The browser page after a cancelled sign-in now says 'Sign-in cancelled' instead of wrongly claiming you're signed in",
+          "type": "bugfix"
+        },
+        {
+          "label": "Provider-side sign-in failures (e.g. a misconfigured provider) are now surfaced with the provider's actual message instead of being reported as 'cancelled'",
+          "type": "bugfix"
+        },
+        {
+          "label": "Connecting Gmail or Outlook before saving credentials now shows the reason in Settings → Mail instead of failing silently",
+          "type": "bugfix"
+        },
+        {
+          "label": "Clearer 'sign in first' messages point at Settings → Account everywhere",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
       "version": "5.62.1",
       "title": "Sign-in polish: Touch ID in the app, no more spinning tabs, connector landing pages",
       "date": "2026-08-30T23:06:16-04:00",
