@@ -2,6 +2,42 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.62.1",
+      "title": "Sign-in polish: Touch ID in the app, no more spinning tabs, connector landing pages",
+      "date": "2026-08-30T23:06:16-04:00",
+      "areas": [
+        "Settings",
+        "Communication",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Touch ID works in the installed app: the unlock prompt (⌘↩ on the profile screen) no longer fails with an 'invalid domain' error",
+          "type": "bugfix"
+        },
+        {
+          "label": "Signing in with Google or Apple now ends on a clean 'You're signed in — close this tab' page instead of leaving the browser spinning, and Job Tracker comes to the front by itself",
+          "type": "bugfix"
+        },
+        {
+          "label": "Connecting Gmail or Outlook ends on a tidy confirmation page (no more full app rendered inside a browser tab), and the Mail settings update the moment you return — no refresh needed",
+          "type": "bugfix"
+        },
+        {
+          "label": "The signed-in line shows how you signed in (Google/Apple/email) and your Google profile photo",
+          "type": "enhancement"
+        },
+        {
+          "label": "The sign-in dialog no longer shows a stale spinner when reopened after a successful sign-in",
+          "type": "bugfix"
+        },
+        {
+          "label": "Clearer message when an account feature needs you to sign in first",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
       "version": "5.62.0",
       "title": "Auto job descriptions, document seeding, smarter attachments, tidier detail pages",
       "date": "2026-08-30T11:02:03-04:00",
