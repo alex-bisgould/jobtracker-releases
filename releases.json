@@ -2,6 +2,29 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.62.6",
+      "title": "Touch ID for admin view now requires your passphrase once to enable",
+      "date": "2026-08-31T21:01:14-04:00",
+      "areas": [
+        "Settings",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Touch ID for admin view now arms only after you've entered your admin passphrase once — an enrolled finger alone can never grant admin access on a fresh install",
+          "type": "feature"
+        },
+        {
+          "label": "A 'Disable Touch ID' control in Settings turns the native unlock off; removing the admin passphrase always disables it too",
+          "type": "enhancement"
+        },
+        {
+          "label": "The obsolete in-app Touch ID enrollment sections are gone — Settings now shows a simple enabled/not-enabled status for this Mac's Touch ID (browser enrollment is unchanged)",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
       "version": "5.62.5",
       "title": "Touch ID works in the app, and a locked profile can no longer block startup",
       "date": "2026-08-31T17:49:37-04:00",
