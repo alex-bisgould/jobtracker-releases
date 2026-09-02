@@ -2,6 +2,129 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.65.0",
+      "title": "Current AI models + corrected pricing: GPT-5.6 (Sol/Terra/Luna) and the real Claude lineup",
+      "date": "2026-09-02T16:04:53-04:00",
+      "areas": [
+        "AI & Parsing",
+        "Settings",
+        "Data & Migrations"
+      ],
+      "items": [
+        {
+          "label": "New: OpenAI GPT-5.6 — Sol, Terra and Luna — are now selectable for every model tier.",
+          "type": "feature"
+        },
+        {
+          "label": "New: the Claude list is current — Opus 5, Sonnet 5, Haiku 4.5, and Fable 5.1.",
+          "type": "feature"
+        },
+        {
+          "label": "Fixed: removed \"Claude Sonnet 4.7\" and \"Claude Haiku 4.7\" — neither model ever existed, and picking either would have failed every Anthropic call.",
+          "type": "bugfix"
+        },
+        {
+          "label": "Fixed: per-token pricing was wrong across the board — Claude Opus was billed 3x too high, GPT-5.4 nano 2-3x too low, and live-call transcription understated by ~2.8x.",
+          "type": "bugfix"
+        },
+        {
+          "label": "Improved: the OpenAI tiers now map onto GPT-5.6 — Luna for Default and Light, Terra for Medium, Sol for Heavy. Luna beats the old GPT-5.4 mini default on quality while costing about a quarter as much.",
+          "type": "enhancement"
+        },
+        {
+          "label": "New: gpt-transcribe and gpt-live-transcribe are offered for voice dictation, and the three older transcription models are labelled with the date OpenAI removes them (Feb 2027). Your current choice is unchanged.",
+          "type": "feature"
+        },
+        {
+          "label": "Fixed: audio models no longer display an invented per-token price in AI Models, and the Batch API note no longer claims batch routing is unbuilt.",
+          "type": "bugfix"
+        }
+      ]
+    },
+    {
+      "version": "5.64.0",
+      "title": "AI explains why it's unavailable, and Built-in AI gains an Anthropic option",
+      "date": "2026-09-02T15:24:50-04:00",
+      "areas": [
+        "AI & Parsing",
+        "Settings",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Every AI button now explains why it couldn't run — signed out, daily allowance used up, Built-in AI not set up, or a feature that needs your own key — instead of the old blanket 'No AI key set' message",
+          "type": "enhancement"
+        },
+        {
+          "label": "Built-in AI can now run on Anthropic (Claude) as well as OpenAI — pick the provider under Settings → AI Provider → Built-in provider (voice always uses OpenAI; batch is OpenAI-only)",
+          "type": "feature"
+        },
+        {
+          "label": "Batch mode now works under Built-in AI (OpenAI option) — previously it always required your own OpenAI key",
+          "type": "feature"
+        },
+        {
+          "label": "The API Keys section collapses when you're on Built-in AI, and warns when the provider you selected has no key — so 'AI won't work' is never a surprise",
+          "type": "enhancement"
+        },
+        {
+          "label": "The AI status card names the Built-in provider in use, and the /select landing card can switch to Built-in AI too",
+          "type": "enhancement"
+        },
+        {
+          "label": "Two offer tools' empty copy-prompt dialogs, a stale resume re-tailor banner, and a merge dialog that blamed 'nothing differed' for an AI outage were all fixed along the way",
+          "type": "bugfix"
+        }
+      ]
+    },
+    {
+      "version": "5.63.0",
+      "title": "Built-in AI goes live end-to-end: proxy repoint + packaged-app key management",
+      "date": "2026-09-02T12:58:48-04:00",
+      "areas": [
+        "AI & Parsing",
+        "Settings"
+      ],
+      "items": [
+        {
+          "label": "Built-in AI (no key needed) is now available in the desktop app — sign in and AI runs on the app's hosted service, with no API key on your machine",
+          "type": "feature"
+        },
+        {
+          "label": "Voice dictation, live-call transcription, and batch mode now work through Built-in AI too — previously they always required your own OpenAI key",
+          "type": "feature"
+        },
+        {
+          "label": "Saving or clearing an API key in the desktop app now actually works: keys go to the macOS Keychain (applied on next launch, and the UI says so) — previously changes were silently ignored and a stale key kept being used",
+          "type": "bugfix"
+        },
+        {
+          "label": "The key status shown in Settings now reflects the key the desktop app really uses",
+          "type": "bugfix"
+        },
+        {
+          "label": "Hosted AI service: audio uploads are forwarded intact (multipart fix), voice calls count against the free daily allowance, and batch mode is paid-plan-only",
+          "type": "enhancement"
+        },
+        {
+          "label": "The hosted AI service's authentication mode is pinned in config so a redeploy can't silently break Built-in AI again",
+          "type": "bugfix"
+        },
+        {
+          "label": "The AI connection status in Settings now tells the truth about Built-in AI — 'connected', 'sign in to activate', or 'available, no key needed' — instead of the stale 'isn't live yet' copy",
+          "type": "bugfix"
+        },
+        {
+          "label": "Interview and offer AI actions no longer fail with a raw error when Built-in AI is signed out or out of daily allowance — they fall back to a copy-prompt that explains why",
+          "type": "bugfix"
+        },
+        {
+          "label": "The offer version-compare and IP carve-out copy-prompt fallbacks were rendering an empty dialog — the prompt now appears",
+          "type": "bugfix"
+        }
+      ]
+    },
+    {
       "version": "5.62.6",
       "title": "Touch ID for admin view now requires your passphrase once to enable",
       "date": "2026-08-31T21:01:14-04:00",
