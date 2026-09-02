@@ -2,6 +2,41 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.65.2",
+      "title": "Desktop mic permission + honest batch toggles",
+      "date": "2026-09-02T16:57:01-04:00",
+      "areas": [
+        "AI & Parsing",
+        "Settings",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "The desktop app now asks for microphone permission the first time you dictate — the standard macOS prompt appears, and your choice shows under Privacy & Security → Microphone (previously the app couldn't ask, recorded silence, and transcripts came back empty)",
+          "type": "bugfix"
+        },
+        {
+          "label": "Batch toggles are struck out with an ⓘ explaining why when your provider can't batch (Anthropic / copy-prompt) — instead of erroring only after you submit",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
+      "version": "5.65.1",
+      "title": "Dictation works in the desktop app",
+      "date": "2026-09-02T16:41:42-04:00",
+      "areas": [
+        "AI & Parsing",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Voice dictation now works in the desktop app — the mic silently failed with 'network' because the app offered a browser speech engine that can't run there; it now records and transcribes through your AI provider (no key needed on Built-in AI)",
+          "type": "bugfix"
+        }
+      ]
+    },
+    {
       "version": "5.65.0",
       "title": "Current AI models + corrected pricing: GPT-5.6 (Sol/Terra/Luna) and the real Claude lineup",
       "date": "2026-09-02T16:04:53-04:00",
