@@ -2,6 +2,37 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.65.3",
+      "title": "Account features go live: safe sign-in linking, workspace sharing, and auto-enter",
+      "date": "2026-09-02T23:59:23-04:00",
+      "areas": [
+        "Settings",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Add another sign-in is live: link a second Apple/Google sign-in to your account — non-destructive, reversible, with a clear preview of which account survives and the resulting plan",
+          "type": "feature"
+        },
+        {
+          "label": "Workspace sharing is live: share a workspace with a household member, revoke any time, and mark a workspace private so household admins can't see it",
+          "type": "feature"
+        },
+        {
+          "label": "Account auto-enter is live: locked workspaces your account is authorized for open without their password after you sign in (shown with an 'Unlocked by your account' badge)",
+          "type": "feature"
+        },
+        {
+          "label": "An upgrade carried by a link is rolled back cleanly on unlink — and anything you purchased after a link is never clawed back",
+          "type": "enhancement"
+        },
+        {
+          "label": "Release tooling: publishing is now single-flight across sessions (two simultaneous publishes can no longer corrupt a build)",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
       "version": "5.65.2",
       "title": "Desktop mic permission + honest batch toggles",
       "date": "2026-09-02T16:57:01-04:00",
