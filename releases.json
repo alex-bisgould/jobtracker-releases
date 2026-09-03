@@ -2,6 +2,33 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.65.4",
+      "title": "Your account, all its sign-ins: clearer identity, easy switching, and the risky link path retired",
+      "date": "2026-09-03T08:04:22-04:00",
+      "areas": [
+        "Settings",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Signed-in surfaces now show your ACCOUNT with all of its sign-in methods (Apple + Google icons, current one highlighted) — signing in the other way no longer looks like you switched accounts",
+          "type": "feature"
+        },
+        {
+          "label": "One-click 'Switch' between your linked sign-ins from the account menu or Settings → Account",
+          "type": "feature"
+        },
+        {
+          "label": "Joining an account with a code now uses the safe, reversible flow everywhere — the old path that permanently deleted the joining account can no longer be reached from the app",
+          "type": "enhancement"
+        },
+        {
+          "label": "Switching accounts no longer briefly shows the previous account's capabilities",
+          "type": "bugfix"
+        }
+      ]
+    },
+    {
       "version": "5.65.3",
       "title": "Account features go live: safe sign-in linking, workspace sharing, and auto-enter",
       "date": "2026-09-02T23:59:23-04:00",
