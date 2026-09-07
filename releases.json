@@ -2,6 +2,42 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.66.0",
+      "title": "Call recording knows who's speaking",
+      "date": "2026-09-06T22:36:26-04:00",
+      "areas": [
+        "Communication",
+        "AI & Parsing",
+        "Settings"
+      ],
+      "items": [
+        {
+          "label": "Recorded calls now capture the other participant's voice as its own stream (macOS system audio — one-time 'System Audio Recording' permission, no screen recording) — speakers are labeled by source, not guessed",
+          "type": "feature"
+        },
+        {
+          "label": "New: 'Fix speakers with AI' on real-time notes — relabels a mislabeled call from context, with preview before anything is saved; offered automatically when a recording comes back one-speaker",
+          "type": "feature"
+        },
+        {
+          "label": "Fixed the root cause of everything transcribing as you: the other-side audio stream had never been able to start in the desktop app",
+          "type": "bugfix"
+        },
+        {
+          "label": "Your voice no longer picks up an echo of the other person as 'you' (explicit echo-cancellation + a cross-stream duplicate filter)",
+          "type": "bugfix"
+        },
+        {
+          "label": "Honest recording status: the recorder shows whether it hears system audio, tab audio, or mic only — with a direct link to grant the permission if it can't hear the call",
+          "type": "enhancement"
+        },
+        {
+          "label": "Corrected model notes: streaming transcription does not label speakers (labeling here is source-based by design)",
+          "type": "enhancement"
+        }
+      ]
+    },
+    {
       "version": "5.65.4",
       "title": "Your account, all its sign-ins: clearer identity, easy switching, and the risky link path retired",
       "date": "2026-09-03T08:04:22-04:00",
