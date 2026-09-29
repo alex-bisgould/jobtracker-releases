@@ -2,6 +2,38 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.66.1",
+      "title": "Debrief drafts straight from your captured call",
+      "date": "2026-09-28T19:52:56-04:00",
+      "areas": [
+        "Jobs",
+        "Leads",
+        "AI & Parsing"
+      ],
+      "items": [
+        {
+          "label": "Draft debrief now detects a call captured by the live copilot (and any transcript saved in the Transcript section), lists them as sources, and drafts with no pasting — the button reads \"Draft from captured call\"",
+          "type": "enhancement"
+        },
+        {
+          "label": "New \"Add more transcript\" box adds text from another recording on top of the captured call, plus a \"Notes for the AI\" box for context like \"the first 10 minutes weren't recorded\"",
+          "type": "feature"
+        },
+        {
+          "label": "When only your side of the call was recorded, the draft infers the interviewer's questions from your answers and marks them with ≈ — auto-detected, including on the one-click post-call draft",
+          "type": "enhancement"
+        },
+        {
+          "label": "Pasting a transcript no longer silently replaces the one saved in the Transcript section — both are used",
+          "type": "bugfix"
+        },
+        {
+          "label": "AI features can read saved transcripts and documents whose stored file path was written under an older data location",
+          "type": "bugfix"
+        }
+      ]
+    },
+    {
       "version": "5.66.0",
       "title": "Call recording knows who's speaking",
       "date": "2026-09-06T22:36:26-04:00",
