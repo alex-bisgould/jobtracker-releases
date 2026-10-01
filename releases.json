@@ -2,6 +2,39 @@
   "schemaVersion": 1,
   "releases": [
     {
+      "version": "5.66.2",
+      "title": "Interview notes look the way they read: formatted, collapsible, editable",
+      "date": "2026-10-01T16:12:16-04:00",
+      "areas": [
+        "Jobs",
+        "Leads",
+        "Timeline",
+        "UI & Layout"
+      ],
+      "items": [
+        {
+          "label": "Interview and meeting notes now show as formatted text (headings, bullets, bold) on the round page, with a Preview / Edit toggle on Post-interview recap and Overall notes & takeaways — double-click the preview to edit the raw markdown",
+          "type": "feature"
+        },
+        {
+          "label": "Long round notes on the job page collapse to a short formatted preview with \"Show all notes\", and the page remembers which ones you expanded",
+          "type": "enhancement"
+        },
+        {
+          "label": "Lead meeting cards now show the meeting notes (collapsible + formatted) — they were never shown before",
+          "type": "enhancement"
+        },
+        {
+          "label": "Prep and outcome notes, the Synthesize preview, and the offer card's negotiation context render formatted markdown too",
+          "type": "enhancement"
+        },
+        {
+          "label": "The one-line Recap summary and timeline entries no longer show raw ## and ** symbols",
+          "type": "bugfix"
+        }
+      ]
+    },
+    {
       "version": "5.66.1",
       "title": "Debrief drafts straight from your captured call",
       "date": "2026-09-28T19:52:56-04:00",
